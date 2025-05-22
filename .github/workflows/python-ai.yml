@@ -1,0 +1,33 @@
+name: Python AI Service CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build-and-run:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Kill previous AI service
+        run: |
+          sudo kill -9 $(sudo lsof -t -i:8000) || true
+
+      - name: Run AI service
+        run: |
+          source venv/bin/activate
+          nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
