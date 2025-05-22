@@ -9,23 +9,25 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.11
-
-      - name: Install dependencies
+      - name: Ensure Python 3.11
         run: |
-          python -m venv venv
+          python3.11 --version
+
+      - name: Set up venv and install dependencies
+        run: |
+          python3.11 -m venv venv
           source venv/bin/activate
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Kill previous AI service
         run: |
-          sudo kill -9 $(sudo lsof -t -i:8000) || true
+          if lsof -i :8000; then
+            sudo kill -9 $(sudo lsof -t -i:8000) || true
+          fi
 
       - name: Run AI service
         run: |
