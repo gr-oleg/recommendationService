@@ -8,7 +8,6 @@ rec = Recommender()
 ORDER_SERVICE_URL = "http://56.228.34.106/order/getAll"
 ITEM_SERVICE_URL = "http://16.171.137.58/item/getAll"
 
-# На старті — підвантажуємо модель та товари
 @app.on_event("startup")
 def load_all():
     try:
