@@ -4,17 +4,21 @@ on:
   push:
     branches: [ "master" ]
 
+concurrency:
+  group: recommendationService-prod
+  cancel-in-progress: true
+
 jobs:
   build-and-run:
     runs-on: self-hosted
+    # max-parallel: 1   # лише якщо буде декілька job-ів
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Ensure Python 3.11 is available
-        run: |
-          python3.11 --version
+        run: python3.11 --version
 
       - name: Set up swap (для low RAM)
         run: |
