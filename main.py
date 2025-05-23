@@ -15,7 +15,7 @@ def load_all():
         rec.items = requests.get(ITEM_SERVICE_URL).json()
         rec.items_by_id = {str(x["id"]): x for x in rec.items}
     except Exception as e:
-        print("Startup error:", e)
+        print("Startup error_:", e)
 
 @app.post("/train")
 def train_model():
