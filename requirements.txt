@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+requests
+pandas
+scikit-surprise
+openai
+pydantic
