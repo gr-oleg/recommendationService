@@ -1,17 +1,25 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import requests
 from collections import Counter
 
 app = FastAPI()
 
-# Замінити адреси, якщо order/item сервіси живуть на інших портах або мають інші ендпоінти
+# Додаємо CORS для доступу з фронта
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # або ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 ORDER_SERVICE_URL = "http://56.228.34.106/order/getAll"
 ITEM_SERVICE_URL = "http://16.171.137.58/item/getAll"
 
 @app.get("/stats")
 def stats():
     try:
-        # Підрахунок топ-товарів і користувачів
         item_counter = Counter()
         user_counter = Counter()
         orders_raw = requests.get(ORDER_SERVICE_URL).json()
